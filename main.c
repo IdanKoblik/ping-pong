@@ -19,20 +19,15 @@ typedef struct {
 } Entity;
 
 typedef struct {
-    float x;
-    float y;
-} Vector;
-
-typedef struct {
     float radius;
     Color color;
     struct Vector2 position;
-    Vector velocity;
+    struct Vector2 velocity;
 } Ball;
 
 typedef struct {
     Entity entity;
-    Vector position;
+    struct Vector2 position;
 } CPU;
 
 void createWindow(Window *window, const char *title, int width, int height);
@@ -55,13 +50,14 @@ int main() {
     Entity player = {entityWidth, entityHeight, entityColor};
     CPU cpu = {{entityWidth, entityHeight, entityColor}, {width - entityWidth, height / 2 - 25}};
 
-    const float speed = 0.05;
+    const float speed = 0.04;
     Ball ball = {10, entityColor, {width / 2, height / 2}, {speed, speed}};
 
     int count = 0;
     const int textSize = 20;
     const int countX = width / 2 - textSize;
     char* countText = NULL;
+
     while (!WindowShouldClose()) {
         if (IsKeyDown(KEY_W)) playerY -= playerSpeed;
         if (IsKeyDown(KEY_S)) playerY += playerSpeed;
@@ -81,17 +77,17 @@ int main() {
         ball.position.x += ball.velocity.x;
         ball.position.y += ball.velocity.y;
 
-        if (ball.position.y - ball.radius <= 0 || ball.position.y + ball.radius >= height)
-            ball.velocity.y = -ball.velocity.y; // Reverse the vertical velocity on collision with top or bottom
-
         // Ball and paddles collision check
-        if (CheckCollisionCircleRec(ball.position, ball.radius, (Rectangle){0, playerY, player.width, player.height}))
+        if (CheckCollisionCircleRec(ball.position, ball.radius, (Rectangle){0, playerY, player.width, player.height})) {
             count++;
+            ball.velocity.x *= -1;
+        }
 
-        if (CheckCollisionCircleRec(ball.position, ball.radius, (Rectangle){0, playerY, player.width, player.height}) ||
-            CheckCollisionCircleRec(ball.position, ball.radius, (Rectangle){cpu.position.x, cpu.position.y, cpu.entity.width, cpu.entity.height}))
-            ball.velocity.x = -ball.velocity.x; // Reverse the horizontal velocity on collision with paddles
+        if (CheckCollisionCircleRec(ball.position, ball.radius, (Rectangle){cpu.position.x, cpu.position.y, cpu.entity.width, cpu.entity.height}))
+            ball.velocity.x *= -1; // Reverse the horizontal velocity on collision with CPU's paddle
 
+        if (ball.position.y - ball.radius <= 0 || ball.position.y + ball.radius >= height)
+            ball.velocity.y *= -1;
 
         if (ball.position.x - ball.radius < 0 || ball.position.x + ball.radius > width)
             CloseWindow();

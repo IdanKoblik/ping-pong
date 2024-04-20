@@ -4,10 +4,10 @@
 #include "strutils.h"
 
 #define MAX_STRING_SIZE 256
+#define TARGET_FPS 60
+#define DELTA 1 
 
-typedef struct {
-    int width;
-    int height;
+typedef struct { int width; int height;
     char title[MAX_STRING_SIZE];
     size_t titleSize;
 } Window;
@@ -37,12 +37,14 @@ int main() {
     const int width = 800;
     const int height = 450;
     const char TITLE[] = "Ping-Pong game";
+    const float deltaTime = (float)DELTA / TARGET_FPS;
 
     createWindow(&gameWindow, TITLE, width, height);
+    SetTargetFPS(TARGET_FPS);
     InitWindow(gameWindow.width, gameWindow.height, gameWindow.title);
 
     float playerY = height / 2 - 25;
-    float playerSpeed = 0.05f;
+    float playerSpeed = 300 * deltaTime;
 
     const int entityWidth = 10;
     const int entityHeight = 50;
@@ -50,7 +52,7 @@ int main() {
     Entity player = {entityWidth, entityHeight, entityColor};
     CPU cpu = {{entityWidth, entityHeight, entityColor}, {width - entityWidth, height / 2 - 25}};
 
-    const float speed = 0.04;
+    const float speed = 300 * deltaTime;
     Ball ball = {10, entityColor, {width / 2, height / 2}, {speed, speed}};
 
     int count = 0;

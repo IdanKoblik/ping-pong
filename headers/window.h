@@ -1,0 +1,7 @@
+#ifndef PING_PONG_WINDOW_H
+#define PING_PONG_WINDOW_H
+
+#define SCREEN_HEIGHT 450
+#define SCREEN_WIDTH 800
+
+#endif //PING_PONG_WINDOW_H

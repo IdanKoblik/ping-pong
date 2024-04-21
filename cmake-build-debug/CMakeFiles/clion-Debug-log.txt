@@ -1,1 +1,0 @@
-CMakeLists.txt not found in /home/idan/Documents/dev/projects/ping-pong Select CMakeLists.txt

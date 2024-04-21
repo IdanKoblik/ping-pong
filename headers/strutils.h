@@ -1,7 +1,7 @@
 #include <string.h>
 
-#ifndef MALWARE_STRUTILS_H
-#define MALWARE_STRUTILS_H
+#ifndef PING_PONG_STRUTILS_H
+#define PING_PONG_STRUTILS_H
 
 void safeStrCopy(char* dest, const char* src, size_t destSize, size_t* actualSize);
 

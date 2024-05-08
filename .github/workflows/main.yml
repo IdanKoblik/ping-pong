@@ -1,0 +1,36 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Install Raylib
+      run: sudo apt-get install libraylib-dev
+      
+    - name: Build
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+        make
+        
+    - name: Test
+      run: |
+        cd build
+        ./ping_pong_game  # Replace with your executable name
+        
+    - name: Deploy
+      if: success()
+      run: |
+        mkdir deploy
+        cp build/ping_pong_game deploy/
+        # Additional deployment steps if needed
